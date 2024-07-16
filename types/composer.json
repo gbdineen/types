@@ -1,0 +1,10 @@
+{
+    "name"       : "gdd/types",
+    "description": "WordPress plugin to secure http headers.",
+    "homepage"   : "https://github.com/gbdineen/types-gdd/types/",
+    "type"       : "wordpress-plugin",
+    "license"    : "GPL-2.0+",
+    "require"    : {
+        "composer/installers": "~2.2.0"
+    }
+}
