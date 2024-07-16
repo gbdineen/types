@@ -1,7 +1,7 @@
 {
     "name"       : "types-gdd/types",
     "description": "VCS of Types plugin for Platform.sh installs",
-    "homepage"   : "https://github.com/gbdineen/types-gdd/types/",
+    "homepage"   : "https://github.com/gbdineen/types/",
     "type"       : "wordpress-plugin",
     "license"    : "GPL-2.0+",
     "require"    : {
