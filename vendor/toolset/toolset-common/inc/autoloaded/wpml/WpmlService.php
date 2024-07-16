@@ -27,23 +27,25 @@ class WpmlService extends Toolset_Wpdb_User {
 
 	const MODE_DISPLAY_AS_TRANSLATED = 'display_as_translated';
 
-
 	/** @var WpmlService */
 	private static $instance;
 
 	private $constants;
 
-
 	/** @var null|string Cache for the current language code. */
 	private $current_language;
-
 
 	/** @var null|string Cache for the default language code. */
 	private $default_language;
 
+	/** @var array */
+	private $active_languages = array();
 
 	/** @var string[] */
 	private $previous_languages = array();
+
+	/** @var null|array  */
+	private $site_domains;
 
 	/** @var int[] */
 	private $post_trid_cache = [];
@@ -52,7 +54,6 @@ class WpmlService extends Toolset_Wpdb_User {
 	private $post_trid_overrides = [];
 
 	private $is_wpml_active_and_configured_cache;
-
 
 	/**
 	 * @return WpmlService
@@ -85,6 +86,7 @@ class WpmlService extends Toolset_Wpdb_User {
 		$this->constants = $constants_di ? : new Toolset_Constants();
 
 		add_action( 'init', [ $this, 'maybe_add_wpml_string_stub_shortcode' ], 100 );
+		add_action( 'init', [ $this, 'register_active_languages' ], 100 );
 
 		/**
 		 * toolset_is_wpml_active_and_configured
@@ -117,6 +119,12 @@ class WpmlService extends Toolset_Wpdb_User {
 	public function maybe_add_wpml_string_stub_shortcode() {
 		if ( ! $this->is_wpml_st_active() ) {
 			add_shortcode( 'wpml-string', array( $this, 'stub_wpml_string_shortcode' ) );
+		}
+	}
+
+	public function register_active_languages() {
+		if ( $this->is_wpml_active_and_configured() ) {
+			$this->active_languages = apply_filters( 'wpml_active_languages', array() );
 		}
 	}
 
@@ -892,6 +900,12 @@ class WpmlService extends Toolset_Wpdb_User {
 
 
 	public function get_site_domains() {
+		if (
+			null !== $this->site_domains
+			&& is_array( $this->site_domains )
+		) {
+			return $this->site_domains;
+		}
 		// Current host.
 		$this_host = str_ireplace( 'www.', '', wp_parse_url( home_url(), PHP_URL_HOST ) );
 
@@ -902,13 +916,12 @@ class WpmlService extends Toolset_Wpdb_User {
 		}, $language_domains );
 
 		// Complete the list with hosts from active languages.
-		$active_languages = apply_filters( 'wpml_active_languages', array() );
 		$active_language_hosts = array_map( function( $language_data ) {
 			return str_ireplace( 'www.', '', wp_parse_url( $language_data['url'], PHP_URL_HOST ) );
-		}, $active_languages );
+		}, $this->active_languages );
 
 		// Define the valid site domains.
-		$accepted_hosts = array_values( array_unique(
+		$this->site_domains = array_values( array_unique(
 			array_merge(
 				[ $this_host ],
 				array_values( $accepted_lang_hosts ),
@@ -916,7 +929,7 @@ class WpmlService extends Toolset_Wpdb_User {
 			)
 		) );
 
-		return $accepted_hosts;
+		return $this->site_domains;
 	}
 
 }

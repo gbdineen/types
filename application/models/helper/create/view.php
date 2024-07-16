@@ -55,7 +55,7 @@ class Types_Helper_Create_View extends Types_Helper_Create_Abstract {
 	 */
 	private function validate_name( $name, $id = 1 ) {
 		$name_exists = $this->get_object_by_title( html_entity_decode( $name ), 'view' );
-		if ( $name_exists !== null ) {
+		if ( $name_exists ) {
 			$name = $id > 1 ? rtrim( rtrim( $name, (string) ( $id - 1 ) ) ) : $name;
 
 			return $this->validate_name( $name . ' ' . $id, $id + 1 );

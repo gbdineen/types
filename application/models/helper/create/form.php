@@ -67,7 +67,7 @@ class Types_Helper_Create_Form extends Types_Helper_Create_Abstract {
 			defined( 'CRED_FORMS_CUSTOM_POST_NAME' ) ? CRED_FORMS_CUSTOM_POST_NAME : 'cred-form'
 		);
 
-		if ( $name_exists !== null ) {
+		if ( $name_exists ) {
 			$name = $id > 1 ? rtrim( rtrim( $name, (string) ( $id - 1 ) ) ) : $name;
 
 			return $this->validate_name( $name . ' ' . $id, $id + 1 );
