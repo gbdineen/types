@@ -1,0 +1,1 @@
+# types-plugin-vcs-repo
