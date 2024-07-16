@@ -1,6 +1,6 @@
 {
-    "name"       : "gdd/types",
-    "description": "WordPress plugin to secure http headers.",
+    "name"       : "types-gdd/types",
+    "description": "VCS of Types plugin for Platform.sh installs",
     "homepage"   : "https://github.com/gbdineen/types-gdd/types/",
     "type"       : "wordpress-plugin",
     "license"    : "GPL-2.0+",
